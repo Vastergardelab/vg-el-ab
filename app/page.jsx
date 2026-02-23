@@ -23,7 +23,7 @@ const brand = {
   areas: ["Skåne", "Landskrona", "Malmö", "Helsingborg"],
   phone: "+46 73-53 31 22 47",
   email: "info@vgel.se",
-  site: "www.vastergard-el.se",
+  site: "www.vastergardel.se",
   logoSrc: "/vastergardel-logo.png", // används för full logga om du vill visa den någonstans
   social: {
     instagram: "https://instagram.com/",
