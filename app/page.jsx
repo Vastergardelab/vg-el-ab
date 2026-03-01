@@ -1,10 +1,9 @@
 "use client";
+
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   Award,
   Clock3,
-  Users,
-  ThumbsUp,
   PlugZap,
   Wrench,
   Lightbulb,
@@ -14,6 +13,7 @@ import {
   Instagram,
   Facebook,
   Linkedin,
+  MapPin,
 } from "lucide-react";
 
 const brand = {
@@ -23,8 +23,12 @@ const brand = {
   areas: ["Skåne", "Landskrona", "Malmö", "Helsingborg"],
   phone: "+46 73-53 31 22 47",
   email: "info@vgel.se",
-  site: "www.vastergardel.se",
-  logoSrc: "/vastergardel-logo.png", // används för full logga om du vill visa den någonstans
+  orgNr: "559560-6376",
+  site: "www.vastergardel.se",  address: {
+    street: "Söndagsgatan 7",
+    postal: "256 64",
+    city: "Helsingborg",
+  },
   social: {
     instagram: "https://instagram.com/",
     facebook: "https://facebook.com/",
@@ -115,6 +119,14 @@ function SocialLinks({ className = "" }) {
 }
 
 function ModalShell({ onClose, title, children }) {
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
   return (
     <div
       className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 px-6"
@@ -127,9 +139,7 @@ function ModalShell({ onClose, title, children }) {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-start justify-between gap-4">
-          <div>
-            <div className="text-sm font-extrabold text-[#1e3a8a]">{title}</div>
-          </div>
+          <div className="text-sm font-extrabold text-[#1e3a8a]">{title}</div>
           <button
             type="button"
             onClick={onClose}
@@ -145,11 +155,90 @@ function ModalShell({ onClose, title, children }) {
   );
 }
 
+function BrandMark({ className = "" }) {
+  // Inline logo (ingen extern bildfil behövs)
+  return (
+    <svg
+      viewBox="0 0 560 180"
+      role="img"
+      aria-label="Västergård El logotyp"
+      className={className}
+      style={{ display: "block" }}
+    >
+      {/* Titel */}
+      <text
+        x="280"
+        y="70"
+        textAnchor="middle"
+        fontFamily="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial"
+        fontWeight="800"
+        fontSize="56"
+        fill="#1e3a8a"
+        letterSpacing="2"
+      >
+        VÄSTERGÅRD EL
+      </text>
+
+      {/* Rad 2 */}
+      <text
+        x="280"
+        y="105"
+        textAnchor="middle"
+        fontFamily="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial"
+        fontWeight="700"
+        fontSize="24"
+        fill="#1e3a8a"
+      >
+        Elinstallation
+        <tspan fill="#f97316">  ⚡  </tspan>
+        Elservice
+        <tspan fill="#f97316">  ⚡  </tspan>
+        Nätverk
+      </text>
+
+      {/* Linje + puls */}
+      <path
+        d="M60 128 C160 118, 240 118, 280 128 S400 138, 500 128"
+        fill="none"
+        stroke="#f97316"
+        strokeWidth="5"
+        strokeLinecap="round"
+      />
+      <path
+        d="M392 128 L404 128 L412 114 L420 150 L430 124 L438 128 L500 128"
+        fill="none"
+        stroke="#f97316"
+        strokeWidth="5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+
+      {/* Tagline */}
+      <text
+        x="280"
+        y="165"
+        textAnchor="middle"
+        fontFamily="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial"
+        fontWeight="800"
+        fontSize="34"
+        fill="#f97316"
+      >
+        Din Elektriker!
+      </text>
+    </svg>
+  );
+}
+
 export default function Page() {
   const [callOpen, setCallOpen] = useState(false);
+  const [callSource, setCallSource] = useState("phone"); // "phone" | "jour"
   const [mailOpen, setMailOpen] = useState(false);
 
-  // Offert-formulär
+  const openCall = (source) => {
+    setCallSource(source);
+    setCallOpen(true);
+  };
+
   const [offer, setOffer] = useState({
     name: "",
     contact: "",
@@ -165,7 +254,7 @@ export default function Page() {
     return `tel:${cleaned}`;
   }, []);
 
-  const mailHref = `mailto:${brand.email}`;
+  const mailHref = useMemo(() => `mailto:${brand.email}`, []);
 
   const stats = useMemo(
     () => [
@@ -186,20 +275,12 @@ export default function Page() {
         desc: "Snabb återkoppling och tydlig plan.",
       },
       {
-        icon: Users,
+        icon: PlugZap,
         value: 10,
         suffix: "+",
-        labelTop: "Års erfarenhet",
+        labelTop: "År",
         title: "Erfarenhet",
         desc: "Gedigen erfarenhet inom el och nätverk.",
-      },
-      {
-        icon: ThumbsUp,
-        value: 500,
-        suffix: "+",
-        labelTop: "Nöjda kunder",
-        title: "Nöjda kunder",
-        desc: "Många nöjda kunder i regionen.",
       },
     ],
     []
@@ -231,19 +312,29 @@ export default function Page() {
       {/* NAVBAR */}
       <header className="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-slate-100">
         <div className="max-w-6xl mx-auto flex items-center justify-between px-6 py-4">
-          <a href="#" className="flex items-center gap-2">
-            <div className="h-10 w-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center shadow-sm">
-              <PlugZap className="h-5 w-5 text-orange-600" />
+          <a href="#hem" className="flex items-center gap-2">
+            <div className="flex items-center">
+              <BrandMark className="h-8 w-auto" />
             </div>
             <div className="text-sm font-extrabold text-[#1e3a8a] tracking-wide">VG EL AB</div>
           </a>
 
           <nav className="hidden md:flex items-center gap-10 text-sm font-semibold text-slate-700">
-            <a href="#" className="text-orange-600">Hem</a>
-            <a href="#tjanster" className="hover:text-orange-600">Tjänster</a>
-            <a href="#offert" className="hover:text-orange-600">Offert</a>
-            <a href="#om" className="hover:text-orange-600">Om oss</a>
-            <a href="#kontakt" className="hover:text-orange-600">Kontakt</a>
+            <a href="#hem" className="text-orange-600">
+              Hem
+            </a>
+            <a href="#tjanster" className="hover:text-orange-600">
+              Tjänster
+            </a>
+            <a href="#offert" className="hover:text-orange-600">
+              Offert
+            </a>
+            <a href="#om" className="hover:text-orange-600">
+              Om oss
+            </a>
+            <a href="#kontakt" className="hover:text-orange-600">
+              Kontakt
+            </a>
           </nav>
 
           <a
@@ -256,38 +347,52 @@ export default function Page() {
       </header>
 
       {/* HERO */}
-      <section className="bg-gradient-to-r from-[#f8f9fc] to-[#f1ebe6] relative overflow-hidden">
+      <section id="hem" className="bg-gradient-to-r from-[#f8f9fc] to-[#f1ebe6] relative overflow-hidden scroll-mt-24">
         <div className="absolute inset-x-0 bottom-0 h-20 opacity-20">
           <div className="h-full w-full bg-[linear-gradient(to_right,transparent,rgba(249,115,22,0.6),transparent)]" />
         </div>
 
-        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 px-6 py-20 items-center">
-          <div>
+        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 px-6 py-20 items-center justify-items-center md:justify-items-stretch">
+          <div className="w-full max-w-xl text-center md:text-left">
             <h1 className="text-5xl md:text-6xl font-extrabold leading-[1.05] text-[#1e3a8a]">
               Professionella eltjänster
               <span className="block text-orange-600">du kan lita på</span>
             </h1>
-            <p className="mt-6 text-lg text-slate-600 max-w-xl">
+            <p className="mt-6 text-lg text-slate-600 max-w-xl mx-auto md:mx-0">
               Vi hjälper dig med allt från elinstallationer och felsökning till nätverkslösningar. Kontakta oss för en
               kostnadsfri konsultation.
             </p>
 
-            <div className="mt-9 flex flex-col sm:flex-row gap-4">
+            {/* Knapp-rad: Begär offert / Jour 24/7 / Våra tjänster */}
+            <div className="mt-9 flex flex-col sm:flex-row gap-4 items-center md:items-start">
               <a
                 href="#offert"
                 className="inline-flex items-center justify-center gap-2 bg-orange-600 text-white px-7 py-4 rounded-2xl font-extrabold shadow hover:bg-orange-700"
               >
                 Begär offert <ArrowRight className="h-5 w-5" />
               </a>
+
+              <button
+                type="button"
+                onClick={() => openCall("jour")}
+                className="relative inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl font-extrabold text-white shadow-lg bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 transition-all duration-300"
+              >
+                <span className="absolute -top-2 -right-2 text-[10px] font-bold bg-white text-red-600 px-2 py-1 rounded-full shadow">
+                  AKUT
+                </span>
+                <Phone className="h-5 w-5" />
+                Jour 24/7
+              </button>
+
               <a
                 href="#tjanster"
-                className="inline-flex items-center justify-center border-2 border-[#1e3a8a] text-[#1e3a8a] px-7 py-4 rounded-2xl font-extrabold bg-white/60"
+                className="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-6 py-3 text-sm font-extrabold text-slate-700 shadow-sm hover:border-orange-200 hover:text-[#1e3a8a]"
               >
                 Våra tjänster
               </a>
             </div>
 
-            <div className="mt-10 flex flex-wrap gap-2">
+            <div className="mt-10 flex flex-wrap gap-2 justify-center md:justify-start">
               {brand.servicesTop.map((s) => (
                 <span
                   key={s}
@@ -301,16 +406,23 @@ export default function Page() {
 
           <div className="flex justify-center">
             <div className="relative w-full max-w-xl flex flex-col items-center">
-              <div className="h-52 w-52 rounded-full bg-white shadow-lg border border-slate-100 flex items-center justify-center">
-                <div className="text-center">
-                  <PlugZap className="h-16 w-16 text-orange-600 mx-auto" />
-                  <div className="mt-4 text-2xl font-extrabold text-[#1e3a8a]">VG EL AB</div>
+              <BrandMark className="w-full max-w-[420px] h-auto drop-shadow-md" />
+
+              {/* ORGNR – bolagskänsla, diskret */}
+              <div className="mt-8 w-full max-w-md">
+                <div className="rounded-2xl bg-white border border-slate-200 px-6 py-4">
+                  <div className="flex items-center justify-between text-xs tracking-wider text-slate-500 font-semibold">
+                    <span>Org.nr</span>
+                    <span className="text-sm font-bold text-[#1e3a8a]">{brand.orgNr}</span>
+                  </div>
                 </div>
               </div>
+
+              {/* Tel + mail */}
               <div className="mt-8 flex flex-wrap items-center justify-center gap-3 text-sm">
                 <button
                   type="button"
-                  onClick={() => setCallOpen(true)}
+                  onClick={() => openCall("phone")}
                   className="inline-flex items-center gap-2 rounded-full bg-white border border-slate-100 px-4 py-2 text-slate-700 hover:border-orange-200"
                 >
                   <Phone className="h-4 w-4 text-orange-600" /> {brand.phone}
@@ -334,7 +446,7 @@ export default function Page() {
           <p className="text-orange-600 font-extrabold tracking-widest text-xs">VARFÖR OSS</p>
           <h2 className="text-4xl md:text-5xl font-extrabold text-[#1e3a8a] mt-4">Därför väljer kunder oss</h2>
 
-          <div className="grid md:grid-cols-4 gap-12 mt-16">
+          <div className="grid md:grid-cols-3 gap-12 mt-16">
             {stats.map((s) => (
               <Stat
                 key={s.title}
@@ -351,7 +463,7 @@ export default function Page() {
       </section>
 
       {/* SERVICES */}
-      <section id="tjanster" className="py-24 bg-[#f8f9fc]">
+      <section id="tjanster" className="scroll-mt-24 py-24 bg-[#f8f9fc]">
         <div className="max-w-6xl mx-auto px-6">
           <p className="text-orange-600 font-extrabold tracking-widest text-xs text-center">TJÄNSTER</p>
           <h2 className="text-4xl md:text-5xl font-extrabold text-[#1e3a8a] mt-4 text-center">Vad vi erbjuder</h2>
@@ -367,8 +479,8 @@ export default function Page() {
         </div>
       </section>
 
-      {/* OFFER / OFFERTFORMULÄR */}
-      <section id="offert" className="py-24 bg-white">
+      {/* OFFER */}
+      <section id="offert" className="scroll-mt-24 py-24 bg-white">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center">
             <p className="text-orange-600 font-extrabold tracking-widest text-xs">OFFERT</p>
@@ -392,7 +504,7 @@ export default function Page() {
                   const body =
                     `Namn: ${offer.name}
 ` +
-                    `Kontakt (tel/mejl): ${offer.contact}
+                    `Kontakt (tel/mail): ${offer.contact}
 ` +
                     `Adress/Ort: ${offer.address}
 ` +
@@ -408,7 +520,7 @@ ${offer.message}
                   const mailto = `mailto:${brand.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
                   window.location.href = mailto;
 
-                  setOfferToast("Tack! Din mejl-app öppnas med färdig offertförfrågan.");
+                  setOfferToast("Tack! Din mail-app öppnas med färdig offertförfrågan.");
                   setTimeout(() => setOfferToast(""), 3500);
                 }}
               >
@@ -424,7 +536,7 @@ ${offer.message}
                     />
                   </div>
                   <div>
-                    <label className="text-sm font-extrabold text-slate-800">Telefon eller mejl</label>
+                    <label className="text-sm font-extrabold text-slate-800">Telefon eller mail</label>
                     <input
                       value={offer.contact}
                       onChange={(e) => setOffer({ ...offer, contact: e.target.value })}
@@ -495,7 +607,7 @@ ${offer.message}
                   Skicka offertförfrågan
                 </button>
 
-                <div className="text-xs text-slate-500">* Formuläret öppnar din mejl-app med en färdig ifylld offertförfrågan.</div>
+                <div className="text-xs text-slate-500">* Formuläret öppnar din mail-app med en färdig ifylld offertförfrågan.</div>
               </form>
 
               {offerToast && (
@@ -542,7 +654,7 @@ ${offer.message}
                 <div className="mt-3 flex flex-wrap gap-3">
                   <button
                     type="button"
-                    onClick={() => setCallOpen(true)}
+                    onClick={() => openCall("phone")}
                     className="inline-flex items-center gap-2 rounded-2xl bg-white border border-slate-100 px-4 py-3 text-slate-700 hover:border-orange-200"
                   >
                     <Phone className="h-4 w-4 text-orange-600" /> Ring
@@ -552,7 +664,7 @@ ${offer.message}
                     onClick={() => setMailOpen(true)}
                     className="inline-flex items-center gap-2 rounded-2xl bg-white border border-slate-100 px-4 py-3 text-slate-700 hover:border-orange-200"
                   >
-                    <Mail className="h-4 w-4 text-orange-600" /> Mejla
+                    <Mail className="h-4 w-4 text-orange-600" /> Mail
                   </button>
                 </div>
               </div>
@@ -562,7 +674,7 @@ ${offer.message}
       </section>
 
       {/* ABOUT */}
-      <section id="om" className="py-24 bg-white">
+      <section id="om" className="scroll-mt-24 py-24 bg-white">
         <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-start">
           <div>
             <p className="text-orange-600 font-extrabold tracking-widest text-xs">OM OSS</p>
@@ -595,7 +707,7 @@ ${offer.message}
 
               <button
                 type="button"
-                onClick={() => setCallOpen(true)}
+                onClick={() => openCall("phone")}
                 className="w-full text-left flex items-center gap-3 rounded-2xl bg-white border border-slate-100 px-5 py-4 hover:border-orange-200"
               >
                 <div className="h-10 w-10 rounded-2xl bg-orange-50 flex items-center justify-center">
@@ -622,6 +734,19 @@ ${offer.message}
               </button>
 
               <div className="rounded-2xl bg-white border border-slate-100 px-5 py-4">
+                <div className="text-sm font-extrabold text-slate-800">Adress</div>
+                <div className="mt-2 flex items-start gap-3 text-slate-600">
+                  <div className="h-10 w-10 rounded-2xl bg-orange-50 flex items-center justify-center">
+                    <MapPin className="h-5 w-5 text-orange-600" />
+                  </div>
+                  <div className="leading-relaxed">
+                    {brand.address.street}<br />
+                    {brand.address.postal} {brand.address.city}
+                  </div>
+                </div>
+              </div>
+
+              <div className="rounded-2xl bg-white border border-slate-100 px-5 py-4">
                 <div className="text-sm font-extrabold text-slate-800">Webb</div>
                 <div className="text-slate-600">{brand.site}</div>
               </div>
@@ -631,14 +756,14 @@ ${offer.message}
       </section>
 
       {/* CONTACT CTA */}
-      <section id="kontakt" className="py-24 bg-[#1e3a8a] text-white text-center">
+      <section id="kontakt" className="scroll-mt-24 py-24 bg-[#1e3a8a] text-white text-center">
         <div className="max-w-3xl mx-auto px-6">
           <h2 className="text-4xl md:text-5xl font-extrabold">Redo att starta ditt projekt?</h2>
           <p className="mt-5 text-white/80 text-lg">Kontakta oss idag så hjälper vi dig.</p>
           <div className="mt-10 flex flex-col sm:flex-row justify-center gap-4">
             <button
               type="button"
-              onClick={() => setCallOpen(true)}
+              onClick={() => openCall("phone")}
               className="bg-orange-600 px-7 py-4 rounded-2xl font-extrabold hover:bg-orange-700"
             >
               Ring oss
@@ -648,7 +773,7 @@ ${offer.message}
               onClick={() => setMailOpen(true)}
               className="bg-white text-[#1e3a8a] px-7 py-4 rounded-2xl font-extrabold"
             >
-              Skicka mejl
+              Skicka mail
             </button>
           </div>
         </div>
@@ -656,9 +781,16 @@ ${offer.message}
 
       {/* CALL MODAL */}
       {callOpen && (
-        <ModalShell onClose={() => setCallOpen(false)} title="Telefonnummer">
+        <ModalShell
+          onClose={() => setCallOpen(false)}
+          title={callSource === "jour" ? "Jour 24/7 – Akut elfel" : "Telefonnummer"}
+        >
           <div className="text-2xl font-extrabold text-slate-900">{brand.phone}</div>
-          <div className="mt-2 text-sm text-slate-500">Tryck “Ring nu” på mobilen, eller kopiera numret.</div>
+          <div className="mt-2 text-sm text-slate-500">
+            {callSource === "jour"
+              ? "Akut fel? Ring direkt så hjälper vi dig så snabbt vi kan."
+              : "Tryck “Ring nu” på mobilen, eller kopiera numret."}
+          </div>
           <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
             <a
               href={telHref}
@@ -671,7 +803,7 @@ ${offer.message}
               onClick={async () => {
                 try {
                   await navigator.clipboard.writeText(brand.phone);
-                } catch (e) {
+                } catch {
                   window.prompt("Kopiera numret:", brand.phone);
                 }
               }}
@@ -687,21 +819,21 @@ ${offer.message}
       {mailOpen && (
         <ModalShell onClose={() => setMailOpen(false)} title="E-postadress">
           <div className="text-2xl font-extrabold text-slate-900">{brand.email}</div>
-          <div className="mt-2 text-sm text-slate-500">Tryck “Öppna mejl” på mobilen, eller kopiera adressen.</div>
+          <div className="mt-2 text-sm text-slate-500">Tryck “Öppna mail” på mobilen, eller kopiera adressen.</div>
           <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
             <a
               href={mailHref}
               className="inline-flex items-center justify-center rounded-2xl bg-orange-600 px-5 py-3 text-sm font-extrabold text-white hover:bg-orange-700"
             >
-              Öppna mejl
+              Öppna mail
             </a>
             <button
               type="button"
               onClick={async () => {
                 try {
                   await navigator.clipboard.writeText(brand.email);
-                } catch (e) {
-                  window.prompt("Kopiera mejl:", brand.email);
+                } catch {
+                  window.prompt("Kopiera mail:", brand.email);
                 }
               }}
               className="inline-flex items-center justify-center rounded-2xl border-2 border-[#1e3a8a] bg-white px-5 py-3 text-sm font-extrabold text-[#1e3a8a]"

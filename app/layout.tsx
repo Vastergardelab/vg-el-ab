@@ -15,6 +15,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Västergård El",
   description: "Professionella eltjänster du kan lita på.",
+  verification: {
+    google: "LF_jTp5FJqZihRmKmW8AW98wYTkfGPcMfVYsw3-A4AE",
+  },
 };
 
 export default function RootLayout({
