@@ -53,7 +53,7 @@ export default function RecensionerPage() {
             Begär offert <ArrowRight className="h-5 w-5" />
           </Link>
           <a
-            href={brand.googleProfileUrl}
+            href={brand.googleReviewUrl}
             target="_blank"
             rel="noreferrer"
             className="inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-7 py-4 font-extrabold text-slate-700 shadow-sm hover:border-orange-200 hover:text-[#1e3a8a]"
@@ -171,7 +171,7 @@ export default function RecensionerPage() {
             </p>
             <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
               <a
-                href={brand.googleProfileUrl}
+                href={brand.googleReviewUrl}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center justify-center gap-2 rounded-2xl bg-white px-6 py-3 text-sm font-extrabold text-[#1e3a8a] hover:bg-slate-100"

@@ -13,6 +13,7 @@ import {
   Mail,
   MapPin,
   Star,
+  ExternalLink,
 } from "lucide-react";
 import { brand, faqs, reviews, reviewSummary, services } from "@/app/data/site";
 import BrandMark from "@/components/brand-mark";
@@ -680,13 +681,21 @@ export default function Page() {
             ))}
           </div>
 
-          <div className="mt-10 text-center">
+          <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link
               href="/recensioner"
               className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-6 py-3 text-sm font-extrabold text-slate-700 shadow-sm hover:border-orange-200 hover:text-[#1e3a8a]"
             >
               Läs alla omdömen <ArrowRight className="h-4 w-4" />
             </Link>
+            <a
+              href={brand.googleReviewUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 rounded-2xl bg-orange-600 px-6 py-3 text-sm font-extrabold text-white shadow hover:bg-orange-700"
+            >
+              Lämna omdöme på Google <ExternalLink className="h-4 w-4" />
+            </a>
           </div>
         </div>
       </section>

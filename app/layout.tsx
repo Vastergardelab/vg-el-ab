@@ -101,6 +101,7 @@ const organizationJsonLd = {
       ? { "@type": "AdministrativeArea", name: area }
       : { "@type": "City", name: area }
   ),
+  sameAs: [brand.googleProfileUrl],
   openingHoursSpecification: [
     {
       "@type": "OpeningHoursSpecification",

@@ -33,7 +33,10 @@ export const brand = {
   },
   // Länk till företagets profil på Google (används för "Lämna omdöme").
   googleProfileUrl:
-    "https://www.google.com/maps/search/?api=1&query=VG+EL+AB+S%C3%B6ndagsgatan+7+Helsingborg",
+    "https://www.google.com/maps/place/?q=place_id:ChIJdTJZVPMzUkYRIVA613lwjAM",
+  // Direktlänk som öppnar Googles formulär för att skriva ett omdöme.
+  googleReviewUrl:
+    "https://search.google.com/local/writereview?placeid=ChIJdTJZVPMzUkYRIVA613lwjAM",
 };
 
 export type ServiceFaq = { q: string; a: string };
