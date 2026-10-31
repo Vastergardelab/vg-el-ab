@@ -12,8 +12,9 @@ import {
   Phone,
   Mail,
   MapPin,
+  Star,
 } from "lucide-react";
-import { brand, faqs, services } from "@/app/data/site";
+import { brand, faqs, reviews, reviewSummary, services } from "@/app/data/site";
 import BrandMark from "@/components/brand-mark";
 import ServiceCard from "@/components/service-card";
 import SocialLinks from "@/components/social-links";
@@ -629,6 +630,63 @@ export default function Page() {
                 <div className="text-slate-600">{brand.site}</div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* RECENSIONER */}
+      <section className="py-24 bg-white">
+        <div className="max-w-6xl mx-auto px-6">
+          <p className="text-orange-600 font-extrabold tracking-widest text-xs text-center">RECENSIONER</p>
+          <h2 className="text-4xl md:text-5xl font-extrabold text-[#1e3a8a] mt-4 text-center">
+            Kunder som rekommenderar oss
+          </h2>
+          <div className="mt-5 flex flex-wrap items-center justify-center gap-x-3 gap-y-2">
+            <span className="flex items-center gap-1 text-orange-500" aria-hidden="true">
+              {Array.from({ length: 5 }).map((_, index) => (
+                <Star key={index} className="h-4 w-4" fill="currentColor" />
+              ))}
+            </span>
+            <span className="text-sm font-bold text-slate-600">
+              {reviewSummary.ratingValue.toFixed(1).replace(".", ",")} av 5 i snitt ·{" "}
+              {reviewSummary.reviewCount} omdömen på {reviewSummary.source}
+            </span>
+          </div>
+
+          <div className="mt-12 grid gap-6 md:grid-cols-3">
+            {reviews.slice(0, 3).map((review) => (
+              <figure
+                key={review.sourceUrl}
+                className="flex h-full flex-col rounded-3xl border border-slate-100 bg-[#f8f9fc] p-8 shadow-sm"
+              >
+                <div className="flex items-center gap-1 text-orange-500" aria-label={`${review.rating} av 5 stjärnor`}>
+                  {Array.from({ length: 5 }).map((_, index) => (
+                    <Star
+                      key={index}
+                      className="h-4 w-4"
+                      fill={index < review.rating ? "currentColor" : "none"}
+                      aria-hidden="true"
+                    />
+                  ))}
+                </div>
+                <blockquote className="mt-5 line-clamp-6 flex-1 text-slate-700">
+                  &ldquo;{review.text}&rdquo;
+                </blockquote>
+                <figcaption className="mt-6 border-t border-slate-200 pt-4">
+                  <div className="text-sm font-extrabold text-[#1e3a8a]">{review.name}</div>
+                  <div className="mt-0.5 text-xs text-slate-500">Omdöme via {review.source}</div>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+
+          <div className="mt-10 text-center">
+            <Link
+              href="/recensioner"
+              className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-6 py-3 text-sm font-extrabold text-slate-700 shadow-sm hover:border-orange-200 hover:text-[#1e3a8a]"
+            >
+              Läs alla omdömen <ArrowRight className="h-4 w-4" />
+            </Link>
           </div>
         </div>
       </section>

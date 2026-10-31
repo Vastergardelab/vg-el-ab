@@ -363,36 +363,65 @@ export const faqs: Faq[] = [
 
 export type Review = {
   name: string;
-  location: string;
   rating: number;
   text: string;
+  /** ISO-datum för omdömet. */
+  date: string;
+  source: string;
+  sourceUrl: string;
   isPlaceholder?: boolean;
 };
 
-// Platshållare – byt ut mot riktiga kundomdömen innan sidan publiceras.
-// Sidan sätts automatiskt till noindex så länge något omdöme är en platshållare.
+// Riktiga kundomdömen hämtade från företagets Reco-profil (2026-10-31).
+// Sidan sätts automatiskt till noindex om något omdöme är en platshållare.
 export const reviews: Review[] = [
   {
-    name: "Kund i Helsingborg",
-    location: "Helsingborg",
+    name: "Niclas Sven Åke K.",
     rating: 5,
-    text: "Snabb återkoppling och en tydlig genomgång innan arbetet startade. Resultatet blev precis som vi hade önskat.",
-    isPlaceholder: true,
+    text: "Snabb respons och mycket professionellt bemötande. Tydlig kommunikation under hela arbetet och jag är supernöjd med resultatet. Kan varmt rekommenderas och jag förblir nu en trogen kund. Tack! MVH Niclas",
+    date: "2026-08-03",
+    source: "Reco.se",
+    sourceUrl: "https://www.reco.se/r/3302032",
   },
   {
-    name: "Kund i Landskrona",
-    location: "Landskrona",
+    name: "Zgjim H.",
     rating: 5,
-    text: "Fick hjälp med felsökning samma dag. Förklarade vad felet berodde på och vad som behövde bytas.",
-    isPlaceholder: true,
+    text: "Väldigt bra bemötande och tydlig kommunikation. Allt gick smidigt och jag är nöjd med helheten. Rekommenderas.",
+    date: "2026-05-11",
+    source: "Reco.se",
+    sourceUrl: "https://www.reco.se/r/3223535",
   },
   {
-    name: "Företagskund i Skåne",
-    location: "Skåne",
+    name: "Arberesha A.",
     rating: 5,
-    text: "Smidigt bemötande och ett noggrant utfört jobb. Vi kommer att anlita dem igen.",
-    isPlaceholder: true,
+    text: "Jag är väldigt nöjd med Västergård El! Vi gjorde om elen i hela lägenheten och Dino var så proffsig, noggrann och det märktes att han verkligen brydde sig om att göra ett bra och hållbart jobb. Kände mig trygg genom hela processen och resultatet blev jättebra! Kan varmt rekommendera.",
+    date: "2026-04-05",
+    source: "Reco.se",
+    sourceUrl: "https://www.reco.se/r/3185387",
+  },
+  {
+    name: "Admir K.",
+    rating: 5,
+    text: "Dino har gjort all el hemma hos oss och vi är väldigt nöjda. Han kom snabbt, var professionell och löste allt på ett noggrant och smidigt sätt. Det märks att han bryr sig om detaljerna och ser till att allt blir ordentligt gjort. Jag kan varmt rekommendera Dino till alla som söker en kunnig och pålitlig elektriker.",
+    date: "2026-03-31",
+    source: "Reco.se",
+    sourceUrl: "https://www.reco.se/r/3180032",
+  },
+  {
+    name: "Mostafa A.",
+    rating: 5,
+    text: "Supernöjd med Västergård El. Dem hjälpte mig med installationer och dragningar i huset på ett snabbt, smidigt och väldigt professionellt sätt! Allt med Dino och Västergård El sköttes professionellt. Nu är jag en trogen och återkommande kund :)",
+    date: "2026-03-18",
+    source: "Reco.se",
+    sourceUrl: "https://www.reco.se/r/3166884",
   },
 ];
+
+export const reviewSummary = {
+  ratingValue: 5,
+  reviewCount: 6,
+  source: "Reco.se",
+  sourceUrl: "https://www.reco.se/vastergardel-el-ab",
+};
 
 export const hasPlaceholderReviews = reviews.some((review) => review.isPlaceholder);

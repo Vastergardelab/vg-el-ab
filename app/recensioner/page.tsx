@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Check, ExternalLink, Phone, Star } from "lucide-react";
-import { brand, hasPlaceholderReviews, reviews } from "@/app/data/site";
+import { brand, hasPlaceholderReviews, reviewSummary, reviews } from "@/app/data/site";
 import PageHero from "@/components/page-hero";
 import CtaSection from "@/components/cta-section";
 
 export const metadata: Metadata = {
   title: "Recensioner och kundomdömen",
   description:
-    "Läs vad kunder säger om VG EL AB – elektriker i Helsingborg och Skåne. Vi hjälper till med elinstallation, felsökning, belysning, nätverk och jour.",
+    "5,0 av 5 i snitt på Reco.se. Läs vad kunder säger om VG EL AB – elektriker i Helsingborg och Skåne. Elinstallation, felsökning, belysning, nätverk och jour.",
   alternates: {
     canonical: "/recensioner",
   },
@@ -25,6 +25,16 @@ export const metadata: Metadata = {
       "Läs vad kunder säger om VG EL AB – elektriker i Helsingborg och Skåne.",
   },
 };
+
+const reviewDateFormatter = new Intl.DateTimeFormat("sv-SE", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
+
+function formatReviewDate(date: string) {
+  return reviewDateFormatter.format(new Date(date));
+}
 
 export default function RecensionerPage() {
   return (
@@ -55,6 +65,32 @@ export default function RecensionerPage() {
 
       <section className="bg-white py-20">
         <div className="mx-auto max-w-6xl px-6">
+          <div className="mb-10 flex flex-col items-start justify-between gap-5 rounded-3xl border border-slate-100 bg-[#f8f9fc] p-6 sm:flex-row sm:items-center">
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-1 text-orange-500" aria-label={`${reviewSummary.ratingValue} av 5 stjärnor`}>
+                {Array.from({ length: 5 }).map((_, index) => (
+                  <Star key={index} className="h-5 w-5" fill="currentColor" aria-hidden="true" />
+                ))}
+              </div>
+              <div>
+                <div className="text-sm font-extrabold text-[#1e3a8a]">
+                  {reviewSummary.ratingValue.toFixed(1).replace(".", ",")} av 5 i snitt
+                </div>
+                <div className="text-xs text-slate-500">
+                  {reviewSummary.reviewCount} omdömen på {reviewSummary.source}
+                </div>
+              </div>
+            </div>
+            <a
+              href={reviewSummary.sourceUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 text-sm font-extrabold text-[#1e3a8a] hover:text-orange-600"
+            >
+              Se alla omdömen på {reviewSummary.source} <ExternalLink className="h-4 w-4" />
+            </a>
+          </div>
+
           {hasPlaceholderReviews && (
             <div className="mb-10 rounded-2xl border border-amber-200 bg-amber-50 px-5 py-4 text-sm text-amber-900">
               <strong className="font-extrabold">Platshållare:</strong> Omdömena nedan är exempel och ska ersättas med
@@ -82,7 +118,15 @@ export default function RecensionerPage() {
                 <figcaption className="mt-6 flex items-center justify-between gap-3 border-t border-slate-200 pt-4">
                   <div>
                     <div className="text-sm font-extrabold text-[#1e3a8a]">{review.name}</div>
-                    <div className="text-xs text-slate-500">{review.location}</div>
+                    <a
+                      href={review.sourceUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="mt-0.5 inline-flex items-center gap-1 text-xs text-slate-500 hover:text-orange-600"
+                    >
+                      {review.source} · {formatReviewDate(review.date)}
+                      <ExternalLink className="h-3 w-3" aria-hidden="true" />
+                    </a>
                   </div>
                   {review.isPlaceholder && (
                     <span className="rounded-full border border-amber-200 bg-amber-100 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wide text-amber-800">
@@ -93,6 +137,19 @@ export default function RecensionerPage() {
               </figure>
             ))}
           </div>
+
+          <p className="mt-6 text-xs text-slate-500">
+            Omdömena är hämtade från vår profil på{" "}
+            <a
+              href={reviewSummary.sourceUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="font-semibold text-[#1e3a8a] underline-offset-2 hover:underline"
+            >
+              Reco.se
+            </a>{" "}
+            och återges i original. Det sjätte omdömet är ett betyg utan skriven kommentar.
+          </p>
 
           <div className="mt-14 grid gap-6 rounded-3xl border border-slate-100 bg-[#f8f9fc] p-8 md:grid-cols-3">
             {[
