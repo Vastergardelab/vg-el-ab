@@ -1,37 +1,51 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+This is a [Next.js](https://nextjs.org) project for VG EL AB / Västergård El.
 
-## Getting Started
-
-First, run the development server:
+## Kom igång
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Öppna [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Bygg och kör produktion
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm start
+```
+
+## Kontaktformuläret
+
+Formuläret på startsidan skickar förfrågan till `app/api/contact/route.ts`.
+
+För att aktivera riktig e-postutskickning, lägg till följande miljövariabler i Vercel
+(Project → Settings → Environment Variables) och gör en ny deploy:
+
+| Variabel | Beskrivning |
+| --- | --- |
+| `RESEND_API_KEY` | API-nyckel från [resend.com](https://resend.com) |
+| `CONTACT_TO` | Mottagare, t.ex. `info@vgel.se` (valfri) |
+| `CONTACT_FROM` | Avsändare, t.ex. `VG EL AB <hej@vastergardel.se>` (valfri) |
+
+Saknas `RESEND_API_KEY` fungerar formuläret fortfarande: då öppnas användarens
+mail-app med en färdig ifylld förfrågan i stället.
+
+## SEO och innehåll
+
+- Metadata per sida ligger i respektive `page.tsx`.
+- Företagsuppgifter, tjänster och FAQ finns i `app/data/site.ts`.
+- Recensioner finns i `app/data/reviews.ts`. Sidan `/recensioner` är `noindex`
+  så länge något omdöme är markerat som platshållare.
+- `app/sitemap.ts` och `app/robots.ts` genererar `sitemap.xml` och `robots.txt`.
+- Strukturerad data (LocalBusiness/Electrician, Service, FAQPage, BreadcrumbList)
+  läggs in automatiskt via komponenterna.
+
+Efter publicering: skicka in `https://vastergardel.se/sitemap.xml` i
+[Google Search Console](https://search.google.com/search-console) under Sitemaps.
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# vg-el-ab
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Deploy on Vercel](https://vercel.com/docs)
