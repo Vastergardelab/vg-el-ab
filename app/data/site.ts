@@ -27,9 +27,11 @@ export const brand = {
   areas: ["Helsingborg", "Landskrona", "Malmö", "Skåne"],
   servicesTop: ["Elinstallation", "Elservice", "Nätverk"],
   social: {
-    instagram: "https://instagram.com/",
-    facebook: "https://facebook.com/",
-    linkedin: "https://linkedin.com/",
+    facebook:
+      "https://www.facebook.com/people/V%C3%A4sterg%C3%A5rd-El-AB/61587689886333/",
+    instagram: "https://www.instagram.com/vastergard_el/",
+    // Lämnas tom tills företaget har en LinkedIn-sida – tomma länkar visas inte.
+    linkedin: "",
   },
   // Länk till företagets profil på Google (används för "Lämna omdöme").
   googleProfileUrl:
